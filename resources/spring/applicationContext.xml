@@ -1,0 +1,70 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"	
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans	
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+	 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		 
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd">
+ 
+	<context:component-scan base-package="com.innovationfollowers.classifieds.rest.*" />
+	
+	<context:property-placeholder location="classpath:db.properties"/>
+ 
+	<!-- ************ JPA configuration *********** -->
+	<tx:annotation-driven transaction-manager="transactionManager" />  
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+  
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceXmlLocation" value="classpath:config/persistence.xml" />
+        <property name="persistenceUnitName" value="restPersistence" />        
+        <property name="dataSource" ref="restDS" />
+        <property name="packagesToScan" value="com.innovationfollowers.classifieds.*" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="true" />
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect" />
+            </bean>
+        </property>
+    </bean>     
+ 
+    	
+	<bean id="cityDao" class="com.innovationfollowers.classifieds.rest.dao.CityDaoImpl"/>	
+    <bean id="cityService" class="com.innovationfollowers.classifieds.rest.service.CityServiceImpl" />	
+    <bean id="cityResource" class="com.innovationfollowers.classifieds.rest.resource.CityResource" />
+    
+    
+    <bean id="areaDao" class="com.innovationfollowers.classifieds.rest.dao.AreaDaoImpl"/>	
+    <bean id="areaService" class="com.innovationfollowers.classifieds.rest.service.AreaServiceImpl" />	
+    <bean id="areaResource" class="com.innovationfollowers.classifieds.rest.resource.AreaResource" />
+    
+    <bean id="categoryDao" class="com.innovationfollowers.classifieds.rest.dao.CategoriesDaoImpl"/>	
+    <bean id="categoryService" class="com.innovationfollowers.classifieds.rest.service.CategoriesServiceImpl" />	
+    <bean id="categoryResource" class="com.innovationfollowers.classifieds.rest.resource.CategoryResource" />
+    
+    <bean id="userInfoDao" class="com.innovationfollowers.classifieds.rest.dao.UserInfoDaoImpl"/>	
+    <bean id="userInfoService" class="com.innovationfollowers.classifieds.rest.service.UserInfoServiceImpl" />	
+    <bean id="userInfoResource" class="com.innovationfollowers.classifieds.rest.resource.UserInfoResource" />
+    
+    <bean id="businessDetailsDao" class="com.innovationfollowers.classifieds.rest.dao.BusinessDetailsDaoImpl"/>	
+    <bean id="businessDetailsService" class="com.innovationfollowers.classifieds.rest.service.BusinessDetailsServiceImpl" />	
+    <bean id="businessDetailsResource" class="com.innovationfollowers.classifieds.rest.resource.BusinessDetailsResource" />
+    
+    
+	
+	<bean id="restDS" destroy-method="close"
+	  class="org.apache.commons.dbcp2.BasicDataSource">
+	    <property name="driverClassName" value="${db.driver}"/>
+	    <property name="url" value="${db.url}"/>
+	    <property name="username" value="${db.username}"/>
+	    <property name="password" value="${db.password}"/>
+	</bean>	
+	
+</beans>
